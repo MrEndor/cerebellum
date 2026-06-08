@@ -1,0 +1,11 @@
+# Keep the build context small and reproducible.
+.git
+build/
+build-*/
+cmake-build-*/
+**/node_modules/
+ui/dist/
+ui/.vite/
+.idea/
+.superpowers/
+docs/

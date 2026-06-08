@@ -1,0 +1,7 @@
+: "${TLS_CERT:=/etc/nginx/certs/fullchain.pem}"
+: "${TLS_KEY:=/etc/nginx/certs/privkey.pem}"
+export TLS_CERT TLS_KEY
+
+if [ -f "$TLS_CERT" ] && [ -f "$TLS_KEY" ]; then
+    cp /etc/nginx/tls.conf.template /etc/nginx/templates/cerebellum.conf.template
+fi

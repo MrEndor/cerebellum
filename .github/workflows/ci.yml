@@ -1,0 +1,51 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  codestyle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install clang-format==22.1.1
+      - name: clang-format
+        run: |
+          mapfile -t files < <(find dataplane libs controlplane -type f \( -name '*.hpp' -o -name '*.cpp' \))
+          clang-format --dry-run -Werror "${files[@]}"
+
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install build deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential cmake ninja-build pkg-config git ca-certificates \
+            libdpdk-dev libzstd-dev
+      - name: Configure
+        run: cmake --preset debug-asan -DCEREBELLUM_BUILD_CONTROLPLANE=OFF
+      - name: Build tests
+        run: cmake --build --preset debug-asan --target cerebellum_tests
+      - name: Run tests
+        run: ctest --preset debug-asan --output-on-failure
+
+  ui:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: ui/package-lock.json
+      - run: npm ci
+        working-directory: ui
+      - run: npm run build
+        working-directory: ui

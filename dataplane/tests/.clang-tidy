@@ -1,0 +1,7 @@
+---
+# Test code legitimately uses literal values (ports, IPs, counts) and short
+# local names. The Catch2 TEST_CASE macro also expands to code that trips
+# __COUNTER__ (C2y extension) and cognitive-complexity. Inherit project rules
+# but relax the checks that only fire on test/framework code.
+InheritParentConfig: true
+Checks: '-readability-magic-numbers,-readability-identifier-length,-readability-function-cognitive-complexity,-clang-diagnostic-c2y-extensions'

@@ -1,0 +1,61 @@
+.idea
+
+# Build directories
+build/
+build-*/
+cmake-build-*/
+out/
+
+# Object files
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+
+# CMake artifacts
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+
+# Coverage artifacts
+*.gcda
+*.gcno
+*.gcov
+coverage/
+coverage.xml
+coverage.html
+
+# IDE files
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Sanitizer logs
+*.log
+
+# Node
+node_modules/
+frontend/dist/
+frontend/.vite/
+ui/dist/
+ui/.vite/
+
+# Docker
+.env
+
+# Stray DPDK helper scripts and root npm lockfile (not part of the project)
+/usertools/
+/package-lock.json
+
+# Brainstorm / visual-companion scratch
+.superpowers/

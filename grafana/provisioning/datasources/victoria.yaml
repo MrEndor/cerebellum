@@ -1,0 +1,10 @@
+apiVersion: 1
+
+datasources:
+  - name: VictoriaMetrics
+    uid: vmds
+    type: prometheus
+    access: proxy
+    url: http://victoria:8428
+    isDefault: true
+    editable: false

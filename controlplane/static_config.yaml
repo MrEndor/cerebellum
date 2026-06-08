@@ -1,0 +1,42 @@
+components_manager:
+  task_processors:
+    main-task-processor:
+      worker_threads: 4
+    fs-task-processor:
+      worker_threads: 1
+
+  default_task_processor: main-task-processor
+
+  components:
+    server:
+      listener:
+        port: 8080
+        task_processor: main-task-processor
+
+    logging:
+      fs-task-processor: fs-task-processor
+      loggers:
+        default:
+          file_path: '@stderr'
+          level: info
+          overflow_behavior: discard
+
+    http-client:
+
+    http-client-core:
+      fs-task-processor: fs-task-processor
+
+    dns-client:
+      fs-task-processor: fs-task-processor
+
+    monitor:
+      app-config: /etc/cerebellum/config.yaml
+      tsdb-url: http://victoria:8428
+
+    handler-stats:
+      path: /api/v1/stats
+      method: GET
+
+    handler-backends:
+      path: /api/v1/backends
+      method: GET

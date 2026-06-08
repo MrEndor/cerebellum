@@ -1,0 +1,85 @@
+{
+  "uid": "cerebellum",
+  "title": "Cerebellum L4 Load Balancer",
+  "tags": ["cerebellum"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "5s",
+  "time": { "from": "now-15m", "to": "now" },
+  "templating": { "list": [] },
+  "annotations": { "list": [] },
+  "panels": [
+    {
+      "id": 1,
+      "type": "timeseries",
+      "title": "Throughput (packets/s)",
+      "datasource": { "type": "prometheus", "uid": "vmds" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "fieldConfig": { "defaults": { "unit": "pps", "custom": { "fillOpacity": 10 } }, "overrides": [] },
+      "targets": [
+        { "refId": "A", "expr": "cerebellum_stats_rx_pps", "legendFormat": "rx" },
+        { "refId": "B", "expr": "cerebellum_stats_tx_pps", "legendFormat": "tx" }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "New flows/s & drops/s",
+      "datasource": { "type": "prometheus", "uid": "vmds" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "fieldConfig": { "defaults": { "unit": "cps", "custom": { "fillOpacity": 10 } }, "overrides": [] },
+      "targets": [
+        { "refId": "A", "expr": "cerebellum_stats_new_flows_ps", "legendFormat": "new flows" },
+        { "refId": "B", "expr": "cerebellum_stats_dropped_pps", "legendFormat": "dropped" }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "timeseries",
+      "title": "Active flows",
+      "datasource": { "type": "prometheus", "uid": "vmds" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "fieldConfig": { "defaults": { "unit": "short", "custom": { "fillOpacity": 10 } }, "overrides": [] },
+      "targets": [
+        { "refId": "A", "expr": "cerebellum_stats_active_flows", "legendFormat": "active" }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "timeseries",
+      "title": "Per-backend flow rate",
+      "datasource": { "type": "prometheus", "uid": "vmds" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "fieldConfig": { "defaults": { "unit": "cps", "custom": { "fillOpacity": 10, "stacking": { "mode": "normal" } } }, "overrides": [] },
+      "targets": [
+        { "refId": "A", "expr": "rate(cerebellum_backend_flows[1m])", "legendFormat": "{{addr}}" }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "state-timeline",
+      "title": "Backend health (1 = up)",
+      "datasource": { "type": "prometheus", "uid": "vmds" },
+      "gridPos": { "h": 7, "w": 24, "x": 0, "y": 16 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "max": 1,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "green", "value": 1 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        { "refId": "A", "expr": "cerebellum_backend_up", "legendFormat": "{{addr}}" }
+      ]
+    }
+  ]
+}

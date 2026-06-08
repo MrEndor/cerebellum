@@ -1,0 +1,41 @@
+server {
+    listen 80 default_server;
+    server_name console.${DOMAIN} whoami.${DOMAIN};
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl default_server;
+    http2 on;
+    server_name console.${DOMAIN};
+
+    ssl_certificate ${TLS_CERT};
+    ssl_certificate_key ${TLS_KEY};
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    location /api/ {
+        proxy_pass http://controlplane:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
+
+server {
+    listen 443 ssl;
+    http2 on;
+    server_name whoami.${DOMAIN};
+
+    ssl_certificate ${TLS_CERT};
+    ssl_certificate_key ${TLS_KEY};
+
+    location / {
+        proxy_pass http://10.0.1.253:80/;
+        proxy_set_header Host $host;
+    }
+}

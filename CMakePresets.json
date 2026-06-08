@@ -1,0 +1,63 @@
+{
+  "version": 6,
+  "configurePresets": [
+    {
+      "name": "release",
+      "displayName": "Release",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      }
+    },
+    {
+      "name": "debug-asan",
+      "displayName": "Debug + Tests + Sanitizers",
+      "binaryDir": "${sourceDir}/build-test",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "CEREBELLUM_BUILD_TESTS": "ON",
+        "CEREBELLUM_ENABLE_SANITIZERS": "ON"
+      }
+    },
+    {
+      "name": "coverage",
+      "displayName": "Coverage",
+      "binaryDir": "${sourceDir}/build-cov",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CEREBELLUM_BUILD_TESTS": "ON",
+        "CEREBELLUM_ENABLE_COVERAGE": "ON"
+      }
+    }
+  ],
+  "buildPresets": [
+    { "name": "release",    "configurePreset": "release",    "jobs": 0 },
+    { "name": "debug-asan", "configurePreset": "debug-asan", "jobs": 0 },
+    { "name": "coverage",   "configurePreset": "coverage",   "jobs": 0 }
+  ],
+  "testPresets": [
+    {
+      "name": "debug-asan",
+      "configurePreset": "debug-asan",
+      "output": { "outputOnFailure": true },
+      "environment": { "ASAN_OPTIONS": "detect_leaks=0" }
+    },
+    {
+      "name": "coverage",
+      "configurePreset": "coverage",
+      "output": { "outputOnFailure": true }
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "ci",
+      "steps": [
+        { "type": "configure", "name": "debug-asan" },
+        { "type": "build",     "name": "debug-asan" },
+        { "type": "test",      "name": "debug-asan" }
+      ]
+    }
+  ]
+}

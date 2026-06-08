@@ -1,0 +1,27 @@
+server {
+    listen 80 default_server;
+    server_name console.${DOMAIN};
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    location /api/ {
+        proxy_pass http://controlplane:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
+
+server {
+    listen 80;
+    server_name whoami.${DOMAIN};
+
+    location / {
+        proxy_pass http://10.0.1.253:80/;
+        proxy_set_header Host $host;
+    }
+}

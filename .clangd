@@ -1,0 +1,11 @@
+CompileFlags:
+  Add:
+    - -std=c++23
+    - -Idataplane/include
+    - -Ilibs/ipc/include
+    - -Ilibs/common/include
+    - -Ibuild-test/_deps/catch2-src/src
+    # Catch2's TEST_CASE macro uses __COUNTER__, which bleeding-edge clang flags
+    # as a C2y extension. The real GCC build is unaffected; silence the IDE noise.
+    - -Wno-c2y-extensions
+  CompilationDatabase: build-test
