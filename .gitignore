@@ -59,3 +59,6 @@ ui/.vite/
 
 # Brainstorm / visual-companion scratch
 .superpowers/
+
+# MkDocs build output
+/site/
