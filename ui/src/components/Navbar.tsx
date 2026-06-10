@@ -17,7 +17,7 @@ export function Navbar({ online, dataplane }: NavbarProps) {
   return (
     <header className="flex items-center justify-between border-b border-slate-200 bg-white px-6 py-3">
       <div className="flex items-center gap-3">
-        <span className="text-lg font-bold text-slate-900">⬡ Cerebellum</span>
+        <span className="text-lg font-bold text-slate-900">⬡ Cerebellum: Zherdev Egor</span>
         <span className="text-sm text-slate-400">L4 Load Balancer</span>
       </div>
       <div className="flex items-center gap-2 text-sm">
